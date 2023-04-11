@@ -16,18 +16,11 @@ architectures:
   - build-on: amd64
     build-for: amd64
 
-#slots:
-#   dbus-gtkcord4:
-#      interface: dbus
-#      bus: session
-#      name: xyz.diamondb.gtkcord4
-
 apps:
   upscayl:
     command: opt/Upscayl/upscayl --no-sandbox
     plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
     extensions: [ gnome ]
-    environment:
 
   nvidia:
     command: opt/Upscayl/upscayl --no-sandbox
@@ -65,6 +58,17 @@ parts:
        - libappindicator3-1
        - desktop-file-utils
        - libvulkan1
+       - mesa-vulkan-drivers
 lint:
   ignore:
     - library
+
+layout:
+  /usr/share/vulkan:
+    symlink: $SNAP/usr/share/vulkan
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so

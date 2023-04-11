@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=2.0.1
+Type=Application
+Terminal=false
+Exec=upscayl
+Name=upscayl
+Icon=${SNAP}/usr/share/icons/hicolor/0x0/apps/upscayl.png

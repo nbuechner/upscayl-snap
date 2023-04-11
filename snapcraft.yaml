@@ -1,0 +1,70 @@
+name: upscayl
+base: core22
+version: '2.0.1'
+summary: Free and Open Source AI Image Upscaler
+description: |
+    A Free and Open Source AI Image Upscaler
+    Upscayl is a cross-platform application built with the Linux-first philosophy.
+    This is not an official build.
+
+    Source: https://github.com/upscayl/upscayl
+    Snap-Source: https://github.com/nbuechner/upscayl-snap
+
+grade: stable
+confinement: strict
+architectures:
+  - build-on: amd64
+    build-for: amd64
+
+#slots:
+#   dbus-gtkcord4:
+#      interface: dbus
+#      bus: session
+#      name: xyz.diamondb.gtkcord4
+
+apps:
+  upscayl:
+    command: opt/Upscayl/upscayl --no-sandbox
+    plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
+    extensions: [ gnome ]
+    environment:
+
+  nvidia:
+    command: opt/Upscayl/upscayl --no-sandbox
+    plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
+    extensions: [ gnome ]
+    environment:
+      __NV_PRIME_RENDER_OFFLOAD: "1"
+      __GLX_VENDOR_LIBRARY_NAME: "nvidia"
+      __VK_LAYER_NV_optimus: "NVIDIA_only"
+      VK_ICD_FILENAMES: "/var/lib/snapd/lib/vulkan/icd.d/nvidia_icd.json"
+
+plugs:
+  shared-memory:
+    private: true
+
+parts:
+  main:
+    source: https://github.com/upscayl/upscayl/releases/download/v2.0.1/upscayl-2.0.1-linux.deb
+    plugin: dump
+    source-type: deb
+    override-build: |
+      snapcraftctl build
+    stage-packages:
+       - libgbm1
+       - libgtk-3-0
+       - libxrandr2
+       - libnss3
+       - libnotify4
+       - libxss1
+       - libxtst6
+       - xdg-utils
+       - libatspi2.0-0
+       - libuuid1
+       - libsecret-1-0
+       - libappindicator3-1
+       - desktop-file-utils
+       - libvulkan1
+lint:
+  ignore:
+    - library

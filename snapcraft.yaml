@@ -1,6 +1,6 @@
 name: upscayl
 base: core22
-version: '2.0.1'
+version: 2.0.1
 summary: Free and Open Source AI Image Upscaler
 description: |
     A Free and Open Source AI Image Upscaler
@@ -21,16 +21,18 @@ apps:
     command: opt/Upscayl/upscayl --no-sandbox
     plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
     extensions: [ gnome ]
-
-  nvidia:
-    command: opt/Upscayl/upscayl --no-sandbox
-    plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
-    extensions: [ gnome ]
     environment:
-      __NV_PRIME_RENDER_OFFLOAD: "1"
-      __GLX_VENDOR_LIBRARY_NAME: "nvidia"
-      __VK_LAYER_NV_optimus: "NVIDIA_only"
-      VK_ICD_FILENAMES: "/var/lib/snapd/lib/vulkan/icd.d/nvidia_icd.json"
+       VK_ICD_FILENAMES: "/var/lib/snapd/lib/vulkan/icd.d/nvidia_icd.json:$SNAP/usr/share/vulkan/icd.d/radeon.x86_64.json:$SNAP/usr/share/vulkan/icd.d/intel_icd.x86_64.json"
+
+#  nvidia:
+#    command: opt/Upscayl/upscayl --no-sandbox
+#    plugs: [home, x11, desktop, removable-media, shared-memory, opengl ]
+#    extensions: [ gnome ]
+#    environment:
+#      __NV_PRIME_RENDER_OFFLOAD: "1"
+#      __GLX_VENDOR_LIBRARY_NAME: "nvidia"
+#      __VK_LAYER_NV_optimus: "NVIDIA_only"
+#      VK_ICD_FILENAMES: "/var/lib/snapd/lib/vulkan/icd.d/nvidia_icd.json"
 
 plugs:
   shared-memory:
@@ -38,7 +40,7 @@ plugs:
 
 parts:
   main:
-    source: https://github.com/upscayl/upscayl/releases/download/v2.0.1/upscayl-2.0.1-linux.deb
+    source: https://github.com/upscayl/upscayl/releases/download/v${SNAPCRAFT_PROJECT_VERSION}/upscayl-$SNAPCRAFT_PROJECT_VERSION-linux.deb
     plugin: dump
     source-type: deb
     override-build: |
@@ -72,5 +74,7 @@ layout:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_lvp.so
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libGLX_nvidia.so.0:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libGLX_nvidia.so.0
   /usr/share/libdrm:
     bind: $SNAP/usr/share/libdrm
